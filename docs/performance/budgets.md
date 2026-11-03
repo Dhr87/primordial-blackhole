@@ -13,7 +13,7 @@ Los perfiles de hardware son decisiones del Game Director. No se cambian sin su 
 | Perfil | Resolución | Meta de FPS | Calidad | CPU | GPU | RAM |
 |---|---|---|---|---|---|---|
 | **Referencia (meta)** | 1920×1080 | **60 FPS** | Alta | 6 núcleos | Gama media, **8 GB de VRAM** | 16 GB |
-| **Piso** | 1920×1080 | **30 FPS obligatorios**, 60 FPS deseables | Baja | *Sin definir, ver 1.3* | Gama de entrada, **6 GB de VRAM** | *Sin definir, ver 1.3* |
+| **Piso** | 1920×1080 | **30 FPS obligatorios**, 60 FPS deseables | Baja | 6 núcleos y 12 hilos, generación anterior a la de referencia | Hardware de generación anterior, **6 GB de VRAM** | 16 GB |
 | Desarrollo | — | — | — | Ryzen de gama alta | RTX 5070 | — |
 
 - **El perfil de referencia es el que aprueba.** El criterio de la Fase 5, "60 FPS en hardware de referencia", se evalúa con ese perfil.
@@ -44,9 +44,9 @@ Los perfiles de hardware son decisiones del Game Director. No se cambian sin su 
 
 Consultas hechas el 2026-11-03. Las páginas de AMD (Ryzen 5 5600 y 3600, RX 7600 y RX 5600 XT) y las fichas individuales de NVIDIA (GTX 1660 SUPER y RTX 2060) devolvieron timeout o 404. TechPowerUp bloqueó el acceso automatizado con un 403. Los valores marcados ⚠️ o ❌ los tiene que confirmar una persona antes de cerrar la Fase 1.
 
-### 1.3 Pendiente de decisión del Game Director
-- **CPU y RAM del piso.** No están definidas. Propuesta: CPU de 6 núcleos y 12 hilos de generación anterior a la de referencia, y 16 GB de RAM. Con 8 GB el presupuesto de RAM de la sección 4 no entra. No se adopta sin aprobación.
-- **Acceso físico al hardware de referencia y al de piso.** El issue exige que sea hardware que el equipo pueda probar realmente, y hoy el equipo solo tiene la PC de desarrollo. Hay que definir cómo se consigue (compra, préstamo o un tester externo) antes de la Fase 5. Sin ese hardware no se puede cumplir el criterio de salida de la Fase 5.
+### 1.3 Decisiones del Game Director
+- **CPU y RAM del piso: aprobado por el Game Director (2026-11-03).** CPU de 6 núcleos y 12 hilos de generación anterior a la de referencia, y 16 GB de RAM. Con 8 GB el presupuesto de RAM de la sección 4 no entra.
+- **Pendiente: acceso físico al hardware de referencia y al de piso.** El issue exige que sea hardware que el equipo pueda probar realmente, y hoy el equipo solo tiene la PC de desarrollo. Hay que definir cómo se consigue (compra, préstamo o un tester externo) antes de la Fase 5. Sin ese hardware no se puede cumplir el criterio de salida de la Fase 5.
 
 ## 2. Presupuesto de frame
 
@@ -62,7 +62,7 @@ En Unity el **main thread** (scripts, animación, física, UI y la preparación 
 | CPU: render thread | ≤ 10,0 ms | ≤ 20,0 ms |
 | GPU | ≤ 14,0 ms | ≤ 28,0 ms |
 
-Nota: el piso apunta a 30-60 FPS. La CPU del piso (por definir) debería sostener el main thread cerca de los 60 FPS, porque bajar la calidad gráfica alivia sobre todo a la GPU y casi no reduce el costo de la simulación.
+Nota: el piso apunta a 30-60 FPS. La CPU del piso debería sostener el main thread cerca de los 60 FPS, porque bajar la calidad gráfica alivia sobre todo a la GPU y casi no reduce el costo de la simulación.
 
 ### 2.1 Reparto del main thread a 60 FPS (provisorio)
 | Sistema | ms |
@@ -75,6 +75,8 @@ Nota: el piso apunta a 30-60 FPS. La CPU del piso (por definir) debería sostene
 | Preparación del render (culling y envío en el main thread) | 3,0 |
 | Reserva | 2,0 |
 | **Total** | **14,0** |
+
+Nota: la "Reserva" de 2,0 ms del main thread se suma al margen del 15 % y debe revisarse con mediciones reales.
 
 ### 2.2 Reparto de la GPU a 60 FPS y 1080p (provisorio)
 Este reparto depende del pipeline elegido en el #2 (forward, forward+ o deferred) y se rehace cuando ese ticket se cierre.
