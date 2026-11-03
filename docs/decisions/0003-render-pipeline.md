@@ -1,5 +1,5 @@
 # ADR 0003 — Pipeline de render: URP vs HDRP
-Estado: **Propuesto** (la decisión es del Game Director) · Fecha: 2026-11-03 · Ticket: #2 · Depende de: ADR 0002 (Unity 6.3 LTS, Windows x64)
+Estado: **Aceptado** (aceptado por el Game Director el 2026-11-03) · Fecha: 2026-11-03 · Ticket: #2 · Depende de: ADR 0002 (Unity 6.3 LTS, Windows x64)
 
 > **Ningún número de este ADR es una medición.** El proyecto Unity todavía no existe (#3). Todos los valores son metas o límites que vienen de `docs/performance/budgets.md`.
 
@@ -111,6 +111,13 @@ Argumentos, en orden de peso:
 
 Lo que se acepta perder: volumétricos locales, contact shadows, SSR, SSGI y area lights en tiempo real nativos [F2]. La atmósfera del pilar 2 se construye con niebla, APV, luz horneada, emisivos, VFX y post-proceso. La luz volumétrica se resuelve con uno de los tres caminos de §3, a elegir en la validación.
 
+## Decisión del Game Director (2026-11-03)
+- **Pipeline:** URP (el paquete que trae Unity 6.3 LTS), con **Forward+** como rendering path por defecto.
+- **Meta de hardware:** se mantiene la de `docs/performance/budgets.md` (1080p/60 en calidad Alta con GPU de 8 GB de VRAM; piso de generación anterior con 6 GB). No se sube la meta.
+- **Nivel de calidad "Ultra" (opcional):** se agrega para hardware más potente (por ejemplo, más resolución, sombras y texturas de mayor calidad). Es un extra: no forma parte de los criterios de aprobación ni de la Fase 5, y no cambia ningún presupuesto.
+
+La aceptación se da con la validación pendiente: la escena `S0-validacion-pipeline` sigue siendo obligatoria antes de producir arte final, y su aprobación definitiva exige el hardware de referencia y de piso.
+
 ## Alternativas descartadas
 - **HDRP.** Tiene la mayor calidad de partida y trae volumétricos nativos, que es lo que más pide la ambientación. Se descarta por estas razones: no tiene funciones nuevas planeadas [F1]; hay más riesgo de no entrar en el piso de 6 GB (no demostrado en ninguna dirección); requiere más configuración y especialización para un equipo chico; y salir de él después no tiene una ruta oficial. **Se reconsidera solo si** la validación demuestra que URP no alcanza el pilar visual dentro de los presupuestos (ver criterios de reversión).
 - **URP con Deferred o Deferred+ como path por defecto.** No se descarta: queda como opción a comparar en la prueba. Deferred no tiene MSAA [F4], y la compatibilidad de Deferred+ con el GPU Resident Drawer es contradictoria en la documentación [F2][F8].
@@ -125,6 +132,7 @@ Lo que se acepta perder: volumétricos locales, contact shadows, SSR, SSGI y are
 - **Jefes colosales:** no hay contact shadows [F2]. El anclaje al suelo se resuelve con la calidad de las sombras de la luz principal, AO y decals de sombra.
 - **VFX:** VFX Graph está en preview para URP [F7], así que su uso en Windows se valida en la prueba. El plan B es el Particle System clásico (Shuriken), que es parte del motor. **No verificado** en este ADR que Shuriken tenga soporte completo en URP 6.3. Todo VFX de combate tiene que leerse sin depender de distorsión ni refracción hasta confirmar qué soporta cada uno.
 - **Upscaling:** STP es la palanca del piso [F9]. Implica TAA, y los VFX y la UI tienen que verse bien con TAA activo (ghosting en partículas rápidas).
+- **Prototipo (Fase 2):** hasta que `S0-validacion-pipeline` esté validada en el hardware de referencia, el prototipo usa greybox y activos `PLACEHOLDER_`, sin arte final.
 
 ## Prueba mínima
 
