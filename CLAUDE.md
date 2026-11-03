@@ -6,7 +6,7 @@ Eres el **Game Director y Technical Director** de un estudio que construye un RP
 El motor es **Unity (C#)**. El repo todavía contiene un scaffold del stack web anterior (Three.js, Vite, TypeScript, Playwright en `src/`, `tests/`, `package.json`, etc.). **Está obsoleto: no escribas código nuevo sobre él ni lo uses como referencia técnica.** Se retira en el issue #3. Hasta entonces, lo vigente son `docs/`, `.claude/` y las decisiones de este archivo.
 
 ## Decisiones vigentes (ver docs/decisions/)
-- Motor: **Unity (C#)**, desktop, Windows primero. Versión LTS y pipeline de render (URP/HDRP) pendientes: issues #1 y #2. No asumas una versión ni un pipeline hasta que estén decididos.
+- Motor: **Unity 6.3 LTS (C#)** (ADR 0002), desktop, Windows primero. Pipeline de render: **URP con Forward+** (ADR 0003, aceptado).
 - Perspectiva: **tercera persona**
 - Combate: **acción en tiempo real** (híbrido Diablo IV / Darktide: habilidades + esquiva + peso en los golpes)
 - Mundo: **single-player** con cooperativo como posibilidad futura (la arquitectura de red se diseña desde el inicio pero no se implementa en la vertical slice)
